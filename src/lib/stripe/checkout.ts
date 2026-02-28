@@ -1,4 +1,4 @@
-import { stripe } from './client';
+import { getStripe } from './client';
 import type { CheckoutRequest } from '@/types';
 
 interface CreateCheckoutSessionParams extends CheckoutRequest {
@@ -19,7 +19,7 @@ export async function createCheckoutSession({
 }: CreateCheckoutSessionParams) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
-  const session = await stripe.checkout.sessions.create({
+  const session = await getStripe().checkout.sessions.create({
     payment_method_types: ['card'],
     mode: 'payment',
     customer_email: email,
@@ -52,5 +52,5 @@ export async function createCheckoutSession({
 }
 
 export async function retrieveCheckoutSession(sessionId: string) {
-  return stripe.checkout.sessions.retrieve(sessionId);
+  return getStripe().checkout.sessions.retrieve(sessionId);
 }
