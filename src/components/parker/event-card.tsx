@@ -58,7 +58,7 @@ export function EventCard({
                 <h3 className="text-lg font-semibold truncate">{event.name}</h3>
 
                 {event.description && (
-                  <p className="text-sm text-muted-foreground truncate">
+                  <p className="text-sm text-muted-foreground">
                     {event.description}
                   </p>
                 )}

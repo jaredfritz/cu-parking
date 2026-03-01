@@ -137,6 +137,7 @@ export default function EventsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Event</TableHead>
+                <TableHead>Description</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Time</TableHead>
                 <TableHead>Status</TableHead>
@@ -185,30 +186,33 @@ export default function EventsPage() {
                 const timeTBD = draft?.time === 'TBD';
                 return (
                   <TableRow key={event.id} className={editMode ? 'align-top' : ''}>
-                    {/* Event name + description */}
+                    {/* Event name */}
+                    <TableCell className="font-medium whitespace-nowrap">
+                      {editMode ? (
+                        <input
+                          className={cellInput('min-w-[160px]')}
+                          value={draft.opponent}
+                          onChange={(e) => setDraft(event.id, { opponent: e.target.value })}
+                          placeholder="Opponent"
+                        />
+                      ) : (
+                        eventName(event)
+                      )}
+                    </TableCell>
+
+                    {/* Description */}
                     <TableCell>
                       {editMode ? (
-                        <div className="space-y-1.5">
-                          <input
-                            className={cellInput()}
-                            value={draft.opponent}
-                            onChange={(e) => setDraft(event.id, { opponent: e.target.value })}
-                            placeholder="Opponent"
-                          />
-                          <input
-                            className={cellInput('text-xs')}
-                            value={draft.description}
-                            onChange={(e) => setDraft(event.id, { description: e.target.value })}
-                            placeholder="Notes (e.g. Homecoming)"
-                          />
-                        </div>
+                        <input
+                          className={cellInput('min-w-[160px]')}
+                          value={draft.description}
+                          onChange={(e) => setDraft(event.id, { description: e.target.value })}
+                          placeholder="e.g. Homecoming"
+                        />
                       ) : (
-                        <div>
-                          <p className="font-medium">{eventName(event)}</p>
-                          {event.description && (
-                            <p className="text-sm text-muted-foreground">{event.description}</p>
-                          )}
-                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {event.description || <span className="text-muted-foreground/40">—</span>}
+                        </span>
                       )}
                     </TableCell>
 
@@ -222,7 +226,7 @@ export default function EventsPage() {
                           onChange={(e) => setDraft(event.id, { date: e.target.value })}
                         />
                       ) : (
-                        <span className="text-sm">{formatEventDate(event.date)}</span>
+                        <span className="text-sm whitespace-nowrap">{formatEventDate(event.date)}</span>
                       )}
                     </TableCell>
 
@@ -251,7 +255,7 @@ export default function EventsPage() {
                           </label>
                         </div>
                       ) : (
-                        <span className="text-sm text-muted-foreground">{formatEventTime(event.time)}</span>
+                        <span className="text-sm text-muted-foreground whitespace-nowrap">{formatEventTime(event.time)}</span>
                       )}
                     </TableCell>
 
@@ -263,7 +267,7 @@ export default function EventsPage() {
                             checked={draft.isPublished}
                             onCheckedChange={(v) => setDraft(event.id, { isPublished: v })}
                           />
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-xs text-muted-foreground whitespace-nowrap">
                             {draft.isPublished ? 'Published' : 'Draft'}
                           </span>
                         </div>
