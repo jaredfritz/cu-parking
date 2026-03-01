@@ -58,7 +58,7 @@ export function HeroSection({ homeGames }: HeroSectionProps) {
               {/* Location (read-only) */}
               <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-4 py-3 bg-gray-50 text-gray-600 text-sm font-medium">
                 <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
-                Memorial Stadium
+                Gies Memorial Stadium
               </div>
 
               {/* Event search with suggestions */}
@@ -112,7 +112,7 @@ export function HeroSection({ homeGames }: HeroSectionProps) {
           <div className="relative aspect-[4/3] rounded-2xl overflow-hidden hidden lg:block shadow-2xl">
             <Image
               src="/memorial stadium.webp"
-              alt="Memorial Stadium"
+              alt="Gies Memorial Stadium"
               fill
               className="object-cover object-center"
               priority

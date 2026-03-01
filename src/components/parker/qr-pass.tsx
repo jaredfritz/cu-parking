@@ -107,7 +107,7 @@ export function QRPass({
             <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
             <div>
               <p className="text-sm font-medium">{lotName}</p>
-              <p className="text-sm text-muted-foreground">Memorial Stadium, Champaign</p>
+              <p className="text-sm text-muted-foreground">Gies Memorial Stadium, Champaign</p>
             </div>
           </div>
 

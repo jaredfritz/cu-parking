@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "CU Parking",
-  description: "Find and book parking for Illinois Fighting Illini home games at Memorial Stadium. Easy checkout, digital passes, and guaranteed spots.",
-  keywords: ["parking", "gameday", "Illinois", "Fighting Illini", "Memorial Stadium", "Champaign"],
+  description: "Find and book parking for Illinois Fighting Illini home games at Gies Memorial Stadium. Easy checkout, digital passes, and guaranteed spots.",
+  keywords: ["parking", "gameday", "Illinois", "Fighting Illini", "Gies Memorial Stadium", "Champaign"],
   icons: { icon: '/favicon.png' },
 };
 

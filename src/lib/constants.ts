@@ -31,9 +31,9 @@ export const SEASON_2026_EVENTS = [
   { date: '2026-11-28', opponent: 'at Northwestern', location: 'Evanston, IL', notes: 'Rivalry Game', time: '12:00', away: true },
 ];
 
-// Memorial Stadium location
+// Gies Memorial Stadium location
 export const MEMORIAL_STADIUM = {
-  name: 'Memorial Stadium',
+  name: 'Gies Memorial Stadium',
   lat: 40.0992,
   lng: -88.2360,
   address: '1402 S 1st St, Champaign, IL 61820',

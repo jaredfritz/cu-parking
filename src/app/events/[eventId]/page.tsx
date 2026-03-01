@@ -292,7 +292,7 @@ export default function EventDetailPage() {
             </span>
             <span className="flex items-center gap-1">
               <MapPin className="h-3.5 w-3.5" />
-              Memorial Stadium, Champaign
+              Gies Memorial Stadium, Champaign
             </span>
           </div>
         </div>

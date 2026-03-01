@@ -205,7 +205,7 @@ function CheckoutContent() {
 
                   <div className="flex items-center gap-1 text-sm">
                     <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <span>Memorial Stadium, Champaign</span>
+                    <span>Gies Memorial Stadium, Champaign</span>
                   </div>
 
                   <Separator />

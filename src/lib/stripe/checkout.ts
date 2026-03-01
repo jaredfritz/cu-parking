@@ -29,7 +29,7 @@ export async function createCheckoutSession({
           currency: 'usd',
           product_data: {
             name: `Parking - ${lot_name}`,
-            description: `${event_name} at Memorial Stadium`,
+            description: `${event_name} at Gies Memorial Stadium`,
           },
           unit_amount: price_cents,
         },

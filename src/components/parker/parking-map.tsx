@@ -92,7 +92,7 @@ export function ParkingMap({
           map,
           position: { lat: stadiumLat, lng: stadiumLng },
           content: stadiumEl,
-          title: 'Memorial Stadium',
+          title: 'Gies Memorial Stadium',
           zIndex: 20,
         });
 

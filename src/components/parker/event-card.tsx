@@ -115,7 +115,7 @@ export function EventCard({
                   </div>
                   <div className="flex items-center gap-1">
                     <MapPin className="h-3.5 w-3.5" />
-                    <span>Memorial Stadium</span>
+                    <span>Gies Memorial Stadium</span>
                   </div>
                   {walkingTimeRange && (
                     <div className="flex items-center gap-1">
