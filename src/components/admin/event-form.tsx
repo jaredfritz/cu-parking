@@ -83,9 +83,7 @@ export function EventForm({ initialData, isEditing = false }: EventFormProps) {
       return;
     }
 
-    const displayName = formData.opponent.startsWith('at ')
-      ? `Illinois @ ${formData.opponent.replace('at ', '')}`
-      : `Illinois vs. ${formData.opponent}`;
+    const displayName = `Illinois vs. ${formData.opponent}`;
 
     const eventData = {
       opponent: formData.opponent,
@@ -93,8 +91,6 @@ export function EventForm({ initialData, isEditing = false }: EventFormProps) {
       time: formData.time,
       description: formData.description,
       isPublished: formData.isPublished,
-      isAway: false,
-      isBye: false,
     };
 
     try {

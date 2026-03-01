@@ -35,7 +35,7 @@ function CheckoutContent() {
         getLots(),
       ]);
 
-      if (!storedEvent || storedEvent.isBye || storedEvent.isAway) {
+      if (!storedEvent) {
         setEvent(null);
       } else {
         setEvent({

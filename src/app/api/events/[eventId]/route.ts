@@ -11,8 +11,6 @@ function dbToEvent(row: any): StoredEvent {
     time: row.time ?? '12:00',
     description: row.description ?? '',
     isPublished: row.is_published ?? false,
-    isAway: row.is_away ?? false,
-    isBye: row.is_bye ?? false,
   };
 }
 
@@ -42,8 +40,6 @@ export async function PATCH(
   if (body.time !== undefined) update.time = body.time;
   if (body.description !== undefined) update.description = body.description;
   if (body.isPublished !== undefined) update.is_published = body.isPublished;
-  if (body.isAway !== undefined) update.is_away = body.isAway;
-  if (body.isBye !== undefined) update.is_bye = body.isBye;
 
   const { data, error } = await supabase
     .from('events')

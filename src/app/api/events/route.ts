@@ -11,8 +11,6 @@ function dbToEvent(row: any): StoredEvent {
     time: row.time ?? '12:00',
     description: row.description ?? '',
     isPublished: row.is_published ?? false,
-    isAway: row.is_away ?? false,
-    isBye: row.is_bye ?? false,
   };
 }
 
@@ -41,8 +39,6 @@ export async function POST(request: NextRequest) {
       time: body.time ?? '12:00',
       description: body.description ?? '',
       is_published: body.isPublished ?? false,
-      is_away: body.isAway ?? false,
-      is_bye: body.isBye ?? false,
     })
     .select()
     .single();

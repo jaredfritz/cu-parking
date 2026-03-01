@@ -12,8 +12,6 @@ interface EventCardProps {
   event: Event;
   lowestPrice?: number;
   availableSpots?: number;
-  isAway?: boolean;
-  isBye?: boolean;
   badges?: string[];
   walkingTimeRange?: string;
 }
@@ -22,51 +20,9 @@ export function EventCard({
   event,
   lowestPrice,
   availableSpots,
-  isAway = false,
-  isBye = false,
   badges = [],
   walkingTimeRange,
 }: EventCardProps) {
-  if (isBye) {
-    return (
-      <Card className="opacity-60">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground">
-                {formatEventDate(event.event_date)}
-              </p>
-              <h3 className="text-lg font-semibold mt-1">BYE Week</h3>
-            </div>
-            <Badge variant="secondary">Off Week</Badge>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (isAway) {
-    return (
-      <Card className="opacity-75">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground">
-                {formatEventDate(event.event_date)} @ {formatEventTime(event.event_time)}
-              </p>
-              <h3 className="text-lg font-semibold mt-1">{event.name}</h3>
-              <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-                <MapPin className="h-3 w-3" />
-                Away Game
-              </p>
-            </div>
-            <Badge variant="outline">Away</Badge>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
   const getInventoryStatus = () => {
     if (availableSpots === undefined) return null;
     if (availableSpots === 0) {
@@ -79,7 +35,6 @@ export function EventCard({
   };
 
   const status = getInventoryStatus();
-
 
   return (
     <Card className="hover:shadow-md transition-shadow group">

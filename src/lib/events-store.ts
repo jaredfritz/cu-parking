@@ -5,8 +5,6 @@ export interface StoredEvent {
   time: string; // "HH:MM" or "TBD"
   description: string;
   isPublished: boolean;
-  isAway: boolean;
-  isBye: boolean;
 }
 
 export async function getEvents(): Promise<StoredEvent[]> {
@@ -46,7 +44,5 @@ export async function deleteEvent(id: string): Promise<void> {
 }
 
 export function eventName(event: StoredEvent): string {
-  return event.opponent.startsWith('at ')
-    ? `Illinois @ ${event.opponent.replace('at ', '')}`
-    : `Illinois vs. ${event.opponent}`;
+  return `Illinois vs. ${event.opponent}`;
 }

@@ -37,11 +37,10 @@ import { toast } from 'sonner';
 
 type EventDraft = {
   opponent: string;
+  description: string;
   date: string;
   time: string;
   isPublished: boolean;
-  isAway: boolean;
-  isBye: boolean;
 };
 
 export default function EventsPage() {
@@ -67,11 +66,10 @@ export default function EventsPage() {
     for (const e of events) {
       initial[e.id] = {
         opponent: e.opponent,
+        description: e.description,
         date: e.date,
         time: e.time,
         isPublished: e.isPublished,
-        isAway: e.isAway,
-        isBye: e.isBye,
       };
     }
     setDrafts(initial);
@@ -183,9 +181,10 @@ export default function EventsPage() {
             <TableBody>
               {events.map((event) => {
                 const draft = drafts[event.id];
+                const timeTBD = draft?.time === 'TBD';
                 return (
                   <TableRow key={event.id} className={editMode ? 'align-top' : ''}>
-                    {/* Event name */}
+                    {/* Event name + description */}
                     <TableCell>
                       {editMode ? (
                         <div className="space-y-1.5">
@@ -195,24 +194,12 @@ export default function EventsPage() {
                             onChange={(e) => setDraft(event.id, { opponent: e.target.value })}
                             placeholder="Opponent"
                           />
-                          <div className="flex gap-3 text-xs text-muted-foreground pt-0.5">
-                            <label className="flex items-center gap-1 cursor-pointer">
-                              <input
-                                type="checkbox"
-                                checked={draft.isAway}
-                                onChange={(e) => setDraft(event.id, { isAway: e.target.checked })}
-                              />
-                              Away
-                            </label>
-                            <label className="flex items-center gap-1 cursor-pointer">
-                              <input
-                                type="checkbox"
-                                checked={draft.isBye}
-                                onChange={(e) => setDraft(event.id, { isBye: e.target.checked })}
-                              />
-                              Bye
-                            </label>
-                          </div>
+                          <input
+                            className={cellInput('text-xs')}
+                            value={draft.description}
+                            onChange={(e) => setDraft(event.id, { description: e.target.value })}
+                            placeholder="Notes (e.g. Homecoming)"
+                          />
                         </div>
                       ) : (
                         <div>
@@ -241,12 +228,27 @@ export default function EventsPage() {
                     {/* Time */}
                     <TableCell>
                       {editMode ? (
-                        <input
-                          className={cellInput('w-24')}
-                          value={draft.time}
-                          onChange={(e) => setDraft(event.id, { time: e.target.value })}
-                          placeholder="TBD or HH:MM"
-                        />
+                        <div className="space-y-1.5">
+                          {!timeTBD && (
+                            <input
+                              type="time"
+                              className={cellInput('w-28')}
+                              value={draft.time}
+                              onChange={(e) => setDraft(event.id, { time: e.target.value })}
+                            />
+                          )}
+                          <label className="flex items-center gap-1.5 text-xs text-muted-foreground cursor-pointer select-none">
+                            <input
+                              type="checkbox"
+                              checked={timeTBD}
+                              onChange={(e) =>
+                                setDraft(event.id, { time: e.target.checked ? 'TBD' : '12:00' })
+                              }
+                              className="rounded"
+                            />
+                            TBD
+                          </label>
+                        </div>
                       ) : (
                         <span className="text-sm text-muted-foreground">{formatEventTime(event.time)}</span>
                       )}
@@ -259,16 +261,11 @@ export default function EventsPage() {
                           <Switch
                             checked={draft.isPublished}
                             onCheckedChange={(v) => setDraft(event.id, { isPublished: v })}
-                            disabled={draft.isAway || draft.isBye}
                           />
                           <span className="text-xs text-muted-foreground">
                             {draft.isPublished ? 'Published' : 'Draft'}
                           </span>
                         </div>
-                      ) : event.isAway ? (
-                        <Badge variant="outline">Away</Badge>
-                      ) : event.isBye ? (
-                        <Badge variant="outline">Bye</Badge>
                       ) : event.isPublished ? (
                         <Badge className="bg-green-100 text-green-800">Published</Badge>
                       ) : (
@@ -292,15 +289,13 @@ export default function EventsPage() {
                                 Edit Event
                               </Link>
                             </DropdownMenuItem>
-                            {!event.isAway && !event.isBye && (
-                              <DropdownMenuItem onClick={() => togglePublished(event.id)}>
-                                {event.isPublished ? (
-                                  <><ToggleLeft className="h-4 w-4 mr-2" />Unpublish</>
-                                ) : (
-                                  <><ToggleRight className="h-4 w-4 mr-2" />Publish</>
-                                )}
-                              </DropdownMenuItem>
-                            )}
+                            <DropdownMenuItem onClick={() => togglePublished(event.id)}>
+                              {event.isPublished ? (
+                                <><ToggleLeft className="h-4 w-4 mr-2" />Unpublish</>
+                              ) : (
+                                <><ToggleRight className="h-4 w-4 mr-2" />Publish</>
+                              )}
+                            </DropdownMenuItem>
                             <DropdownMenuItem
                               className="text-red-600"
                               onClick={async () => {

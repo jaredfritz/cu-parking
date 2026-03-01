@@ -10,8 +10,6 @@ import type { Event } from '@/types';
 
 type HomeEvent = Event & {
   lowestPrice?: number;
-  isAway?: boolean;
-  isBye?: boolean;
   walkingTimeRange?: string;
 };
 
@@ -31,32 +29,27 @@ export function HomeEventSection() {
 
       const today = new Date().toISOString().split('T')[0];
 
-      const allEvents: HomeEvent[] = events.map((event) => {
-        const isHome = !event.isAway && !event.isBye;
-        return {
-          id: event.id,
-          property_id: 'property-1',
-          name: eventName(event),
-          event_date: event.date,
-          event_time: event.time,
-          gates_open_time: null,
-          presale_cutoff: null,
-          in_person_enabled: true,
-          is_published: event.isPublished,
-          image_url: null,
-          description: event.description || null,
-          season_id: 'season-2026',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          lowestPrice: isHome ? lowestPrice : undefined,
-          isAway: event.isAway,
-          isBye: event.isBye,
-          walkingTimeRange: isHome ? walkingTimeRange : undefined,
-        };
-      });
+      const allEvents: HomeEvent[] = events.map((event) => ({
+        id: event.id,
+        property_id: 'property-1',
+        name: eventName(event),
+        event_date: event.date,
+        event_time: event.time,
+        gates_open_time: null,
+        presale_cutoff: null,
+        in_person_enabled: true,
+        is_published: event.isPublished,
+        image_url: null,
+        description: event.description || null,
+        season_id: 'season-2026',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        lowestPrice,
+        walkingTimeRange,
+      }));
 
       setUpcomingHomeGames(
-        allEvents.filter((e) => !e.isAway && !e.isBye && e.event_date >= today)
+        allEvents.filter((e) => e.event_date >= today)
       );
     }
     load();

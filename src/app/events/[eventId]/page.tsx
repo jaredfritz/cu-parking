@@ -171,7 +171,7 @@ export default function EventDetailPage() {
         getLots(),
       ]);
 
-      if (!storedEvent || storedEvent.isBye || storedEvent.isAway) {
+      if (!storedEvent) {
         setEvent(null);
       } else {
         setEvent({

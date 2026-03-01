@@ -6,8 +6,6 @@ import type { Event } from '@/types';
 interface EventWithMeta extends Event {
   lowestPrice?: number;
   availableSpots?: number;
-  isAway?: boolean;
-  isBye?: boolean;
   badges?: string[];
   walkingTimeRange?: string;
 }
@@ -37,8 +35,6 @@ export function EventGrid({ events, title = 'Upcoming Events' }: EventGridProps)
               event={event}
               lowestPrice={event.lowestPrice}
               availableSpots={event.availableSpots}
-              isAway={event.isAway}
-              isBye={event.isBye}
               badges={event.badges}
               walkingTimeRange={event.walkingTimeRange}
             />
