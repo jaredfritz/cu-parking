@@ -31,6 +31,13 @@ type LotDraft = {
   capacity: number;
   price_dollars: number;
   walking_time_minutes: number;
+  distance_miles: number;
+  lat: number;
+  lng: number;
+  isThirdParty: boolean;
+  inPersonEnabled: boolean;
+  gatesOpenHours: number;
+  presaleCutoffHours: number;
   isActive: boolean;
 };
 
@@ -65,6 +72,13 @@ export default function LotsPage() {
         capacity: l.capacity,
         price_dollars: l.price_cents / 100,
         walking_time_minutes: l.walking_time_minutes,
+        distance_miles: l.distance_miles,
+        lat: l.lat,
+        lng: l.lng,
+        isThirdParty: l.isThirdParty,
+        inPersonEnabled: l.inPersonEnabled,
+        gatesOpenHours: l.gatesOpenHours ?? 3,
+        presaleCutoffHours: l.presaleCutoffHours ?? 1,
         isActive: l.isActive,
       };
     }
@@ -92,6 +106,13 @@ export default function LotsPage() {
             capacity: drafts[l.id].capacity,
             price_cents: Math.round(drafts[l.id].price_dollars * 100),
             walking_time_minutes: drafts[l.id].walking_time_minutes,
+            distance_miles: drafts[l.id].distance_miles,
+            lat: drafts[l.id].lat,
+            lng: drafts[l.id].lng,
+            isThirdParty: drafts[l.id].isThirdParty,
+            inPersonEnabled: drafts[l.id].inPersonEnabled,
+            gatesOpenHours: drafts[l.id].gatesOpenHours,
+            presaleCutoffHours: drafts[l.id].presaleCutoffHours,
             isActive: drafts[l.id].isActive,
           })
         )
@@ -164,12 +185,20 @@ export default function LotsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Lot Name</TableHead>
+                <TableHead className="whitespace-nowrap">Lot Name</TableHead>
+                <TableHead>Address</TableHead>
                 <TableHead>Capacity</TableHead>
                 <TableHead>Price</TableHead>
-                <TableHead>Walk Time</TableHead>
+                <TableHead className="whitespace-nowrap">Walk Time</TableHead>
+                <TableHead>Distance</TableHead>
+                <TableHead>Lat</TableHead>
+                <TableHead>Lng</TableHead>
+                <TableHead className="whitespace-nowrap">3rd Party</TableHead>
+                <TableHead className="whitespace-nowrap">In-Person</TableHead>
+                <TableHead className="whitespace-nowrap">Gates Open</TableHead>
+                <TableHead className="whitespace-nowrap">Presale Cutoff</TableHead>
                 <TableHead>Badges</TableHead>
-                <TableHead>Active for All Events</TableHead>
+                <TableHead className="whitespace-nowrap">Active</TableHead>
                 <TableHead className="w-[120px] text-right">
                   {editMode ? (
                     <div className="flex items-center justify-end gap-1">
@@ -214,33 +243,35 @@ export default function LotsPage() {
                 const draft = drafts[lot.id];
                 return (
                   <TableRow key={lot.id} className={editMode ? 'align-top' : ''}>
+
                     {/* Lot Name */}
+                    <TableCell className="font-medium whitespace-nowrap">
+                      {editMode ? (
+                        <input
+                          className={cellInput('min-w-[140px]')}
+                          value={draft.name}
+                          onChange={(e) => setDraft(lot.id, { name: e.target.value })}
+                          placeholder="Lot name"
+                        />
+                      ) : (
+                        <div className="flex items-center gap-1.5">
+                          <MapPin className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                          {lot.name}
+                        </div>
+                      )}
+                    </TableCell>
+
+                    {/* Address */}
                     <TableCell>
                       {editMode ? (
-                        <div className="space-y-1">
-                          <input
-                            className={cellInput()}
-                            value={draft.name}
-                            onChange={(e) => setDraft(lot.id, { name: e.target.value })}
-                            placeholder="Lot name"
-                          />
-                          <input
-                            className={cellInput('text-xs')}
-                            value={draft.address}
-                            onChange={(e) => setDraft(lot.id, { address: e.target.value })}
-                            placeholder="Address"
-                          />
-                        </div>
+                        <input
+                          className={cellInput('min-w-[160px]')}
+                          value={draft.address}
+                          onChange={(e) => setDraft(lot.id, { address: e.target.value })}
+                          placeholder="Address"
+                        />
                       ) : (
-                        <div className="flex items-start gap-2">
-                          <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                          <div>
-                            <p className="font-medium leading-snug">{lot.name}</p>
-                            {lot.address && (
-                              <p className="text-xs text-muted-foreground">{lot.address}</p>
-                            )}
-                          </div>
-                        </div>
+                        <span className="text-sm text-muted-foreground whitespace-nowrap">{lot.address || '—'}</span>
                       )}
                     </TableCell>
 
@@ -255,7 +286,7 @@ export default function LotsPage() {
                           min={0}
                         />
                       ) : (
-                        <span>{lot.capacity} spots</span>
+                        <span className="whitespace-nowrap">{lot.capacity} spots</span>
                       )}
                     </TableCell>
 
@@ -284,7 +315,7 @@ export default function LotsPage() {
                         <div className="flex items-center gap-1">
                           <input
                             type="number"
-                            className={cellInput('w-16')}
+                            className={cellInput('w-14')}
                             value={draft.walking_time_minutes}
                             onChange={(e) => setDraft(lot.id, { walking_time_minutes: parseInt(e.target.value) || 0 })}
                             min={0}
@@ -292,17 +323,132 @@ export default function LotsPage() {
                           <span className="text-sm text-muted-foreground">min</span>
                         </div>
                       ) : (
-                        <span>{lot.walking_time_minutes} min</span>
+                        <span className="whitespace-nowrap">{lot.walking_time_minutes} min</span>
                       )}
                     </TableCell>
 
-                    {/* Badges — read-only in inline mode; use full edit for badge changes */}
+                    {/* Distance */}
+                    <TableCell>
+                      {editMode ? (
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            className={cellInput('w-16')}
+                            value={draft.distance_miles}
+                            onChange={(e) => setDraft(lot.id, { distance_miles: parseFloat(e.target.value) || 0 })}
+                            min={0}
+                            step={0.1}
+                          />
+                          <span className="text-sm text-muted-foreground">mi</span>
+                        </div>
+                      ) : (
+                        <span className="whitespace-nowrap">{lot.distance_miles} mi</span>
+                      )}
+                    </TableCell>
+
+                    {/* Lat */}
+                    <TableCell>
+                      {editMode ? (
+                        <input
+                          type="number"
+                          className={cellInput('w-24')}
+                          value={draft.lat}
+                          onChange={(e) => setDraft(lot.id, { lat: parseFloat(e.target.value) || 0 })}
+                          step={0.0001}
+                        />
+                      ) : (
+                        <span className="text-sm text-muted-foreground tabular-nums">{lot.lat}</span>
+                      )}
+                    </TableCell>
+
+                    {/* Lng */}
+                    <TableCell>
+                      {editMode ? (
+                        <input
+                          type="number"
+                          className={cellInput('w-24')}
+                          value={draft.lng}
+                          onChange={(e) => setDraft(lot.id, { lng: parseFloat(e.target.value) || 0 })}
+                          step={0.0001}
+                        />
+                      ) : (
+                        <span className="text-sm text-muted-foreground tabular-nums">{lot.lng}</span>
+                      )}
+                    </TableCell>
+
+                    {/* 3rd Party */}
+                    <TableCell>
+                      {editMode ? (
+                        <Switch
+                          checked={draft.isThirdParty}
+                          onCheckedChange={(v) => setDraft(lot.id, { isThirdParty: v })}
+                        />
+                      ) : (
+                        lot.isThirdParty
+                          ? <Badge variant="outline" className="text-xs">3P</Badge>
+                          : <span className="text-muted-foreground/40 text-sm">—</span>
+                      )}
+                    </TableCell>
+
+                    {/* In-Person */}
+                    <TableCell>
+                      {editMode ? (
+                        <Switch
+                          checked={draft.inPersonEnabled}
+                          onCheckedChange={(v) => setDraft(lot.id, { inPersonEnabled: v })}
+                        />
+                      ) : (
+                        lot.inPersonEnabled
+                          ? <Badge variant="secondary" className="text-xs">Yes</Badge>
+                          : <span className="text-muted-foreground/40 text-sm">—</span>
+                      )}
+                    </TableCell>
+
+                    {/* Gates Open */}
+                    <TableCell>
+                      {editMode ? (
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            className={cellInput('w-14')}
+                            value={draft.gatesOpenHours}
+                            onChange={(e) => setDraft(lot.id, { gatesOpenHours: parseFloat(e.target.value) || 0 })}
+                            min={0}
+                            step={0.5}
+                          />
+                          <span className="text-sm text-muted-foreground">hrs</span>
+                        </div>
+                      ) : (
+                        <span className="text-sm whitespace-nowrap">{lot.gatesOpenHours ?? 3} hrs before</span>
+                      )}
+                    </TableCell>
+
+                    {/* Presale Cutoff */}
+                    <TableCell>
+                      {editMode ? (
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            className={cellInput('w-14')}
+                            value={draft.presaleCutoffHours}
+                            onChange={(e) => setDraft(lot.id, { presaleCutoffHours: parseFloat(e.target.value) || 0 })}
+                            min={0}
+                            step={0.5}
+                          />
+                          <span className="text-sm text-muted-foreground">hrs</span>
+                        </div>
+                      ) : (
+                        <span className="text-sm whitespace-nowrap">{lot.presaleCutoffHours ?? 1} hrs before</span>
+                      )}
+                    </TableCell>
+
+                    {/* Badges — read-only; use full edit page to change */}
                     <TableCell>
                       <div className="flex flex-wrap gap-1">
                         {lot.badges.map((badge) => {
                           const config = BADGE_CONFIG[badge];
                           return (
-                            <Badge key={badge} variant={config?.variant || 'outline'} className="text-xs">
+                            <Badge key={badge} variant={config?.variant || 'outline'} className="text-xs whitespace-nowrap">
                               {config?.label || badge}
                             </Badge>
                           );
@@ -318,7 +464,7 @@ export default function LotsPage() {
                             checked={draft.isActive}
                             onCheckedChange={(v) => setDraft(lot.id, { isActive: v })}
                           />
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-xs text-muted-foreground whitespace-nowrap">
                             {draft.isActive ? 'Active' : 'Inactive'}
                           </span>
                         </div>
@@ -328,9 +474,6 @@ export default function LotsPage() {
                             checked={lot.isActive}
                             onCheckedChange={() => toggleActive(lot.id, lot.isActive)}
                           />
-                          {lot.isThirdParty && (
-                            <span className="text-xs text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded font-medium">3P</span>
-                          )}
                           <Link
                             href="#"
                             className="text-xs text-primary hover:underline whitespace-nowrap"
